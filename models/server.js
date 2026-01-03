@@ -6,14 +6,19 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 const dbURI = "mongodb+srv://tanishagoel32004_db_user:IFdD3krug0aUDNgm@contactmanagercluster.4djczuy.mongodb.net/contact-app?retryWrites=true&w=majority";
+const path = require('path');
 
+app.use(express.static(path.join(__dirname, 'client/build')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+});
 mongoose.connect(dbURI)
   .then(() => console.log("✅ MongoDB Connected Successfully"))
   .catch(err => {
     console.log("❌ Connection Error Detail:");
     console.log(err.message);
   });
-// Schema Design 
+
 const contactSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
